@@ -1,10 +1,13 @@
 package com.eazybytes.accounts.service.impl;
 
+import com.eazybytes.accounts.Dto.AccountDto;
 import com.eazybytes.accounts.Dto.CustomerDto;
 import com.eazybytes.accounts.constants.AccountsConstants;
 import com.eazybytes.accounts.entity.Accounts;
 import com.eazybytes.accounts.entity.Customer;
 import com.eazybytes.accounts.exception.CustomerAlreadyExistsException;
+import com.eazybytes.accounts.exception.ResourceNotFoundException;
+import com.eazybytes.accounts.mapper.AccountsMapper;
 import com.eazybytes.accounts.mapper.CustomerMapper;
 import com.eazybytes.accounts.reporsitory.AccountsReporsitory;
 import com.eazybytes.accounts.reporsitory.CustomerRepository;
@@ -32,10 +35,65 @@ public class AccountsServiceImpl implements IAccountService {
         if (optionalCustomer.isPresent()) {
             throw new CustomerAlreadyExistsException("Customer already registered with mobile number " + customerDto.getMobileNumber());
         }
-        customer.setCreatedAt(LocalDateTime.now());
-        customer.setCreatedBy("Admin");
+
         Customer savedCustomer = customerRepository.save(customer);
         accountsReporsitory.save(createNewAccount(savedCustomer));
+    }
+
+    @Override
+    public CustomerDto fetchAccount(String mobileNumber) {
+
+
+        Customer customer = customerRepository.findByMobileNumber(mobileNumber).orElseThrow(
+                ()-> new ResourceNotFoundException("Customer","mobileNumber",mobileNumber)
+        );
+
+        Accounts accounts = accountsReporsitory.findByCustomerId(customer.getCustomerId()).orElseThrow(
+                ()-> new ResourceNotFoundException("Account", "customerId", customer.getCustomerId().toString())
+        );
+
+        CustomerDto customerDto = CustomerMapper.mapToCustomerDto(customer,new CustomerDto());
+        customerDto.setAccountDto(AccountsMapper.mapToAccountDto(accounts,new AccountDto()));
+
+        return customerDto;
+    }
+
+    @Override
+    public boolean updateAccount(CustomerDto customerDto) {
+       boolean isUpdated = false;
+
+       AccountDto accountDto = customerDto.getAccountDto();
+       if(accountDto!=null){
+           Accounts accounts = accountsReporsitory.findById(accountDto.getAccountNumber()).orElseThrow(
+                   ()-> new ResourceNotFoundException("Account","Account Number", accountDto.getAccountNumber())
+           );
+           AccountsMapper.mapToAccounts(accounts,accountDto);
+           accounts = accountsReporsitory.save(accounts);
+
+           Long customerId = accounts.getCustomerId();
+
+           Customer customer = customerRepository.findById(customerId).orElseThrow(
+                   ()-> new ResourceNotFoundException("Customer","customerId",customerId.toString())
+           );
+
+           CustomerMapper.mapToCustomer(customer,customerDto);
+           customerRepository.save(customer);
+           isUpdated =  true;
+       }
+
+       return isUpdated;
+    }
+
+    @Override
+    public boolean deleteAccount(String mobileNumber) {
+        Customer customer = customerRepository.findByMobileNumber(mobileNumber).orElseThrow(
+                ()->new ResourceNotFoundException("Customer","mobileNumber",mobileNumber)
+        );
+
+        accountsReporsitory.deleteByCustomerId(customer.getCustomerId());
+        customerRepository.deleteById(customer.getCustomerId());
+
+        return  true;
     }
 
 
@@ -47,8 +105,6 @@ public class AccountsServiceImpl implements IAccountService {
         newAccount.setAccountNumber(randomAccNumber);
         newAccount.setAccountType(AccountsConstants.SAVINGS);
         newAccount.setBranchAddress(AccountsConstants.ADDRESS);
-        newAccount.setCreatedAt(LocalDateTime.now());
-        newAccount.setCreatedBy("Admin");
         return newAccount;
     }
 }
