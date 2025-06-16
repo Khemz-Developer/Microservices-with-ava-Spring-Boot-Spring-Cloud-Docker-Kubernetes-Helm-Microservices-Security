@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@ControllerAdvice
+@ControllerAdvice // used to handle all exceptions
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 
