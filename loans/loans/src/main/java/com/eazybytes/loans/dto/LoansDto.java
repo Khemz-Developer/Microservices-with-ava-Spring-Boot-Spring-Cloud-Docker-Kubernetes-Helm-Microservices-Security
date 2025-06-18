@@ -9,9 +9,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Schema(
+    name = "Loans",
     description = "Schema for loan details"
 )
-@Data @AllArgsConstructor
+@Data
 public class LoansDto {
 
     @NotEmpty(message = "Mobile Number cannot be empty or null")
