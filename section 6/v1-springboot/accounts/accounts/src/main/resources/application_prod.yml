@@ -1,0 +1,16 @@
+spring:
+  config:
+    activate:
+      on-profile: "prod"
+
+build:
+  version: "1.0"
+
+accounts:
+  message: "Welcome to Easy Banking Application running in production"
+  contactDetails:
+    name: "Jalitha Prod"
+    email: "6B0Hw@exampleProd.com"
+  onCallSupport:
+    - (555) 555-5566
+    - (555) 555-3336

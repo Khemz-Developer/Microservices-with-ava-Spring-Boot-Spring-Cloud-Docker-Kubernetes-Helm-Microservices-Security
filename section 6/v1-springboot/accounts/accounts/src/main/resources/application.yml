@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: jalitha
+    password: 1234
+  h2:
+    console:
+      enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  config:
+    import:
+      - "application_qa.yml"
+      - "application_prod.yml"
+  profiles:
+    active:
+      - "qa"
+
+
+build:
+  version: "3.0"
+
+accounts:
+  message: "Welcome to Easy Banking Application running in development"
+  contactDetails:
+    name: "Jalitha Developer"
+    email: "6B0Hw@example.com"
+  onCallSupport:
+    - (555) 555-5555
+    - (555) 555-5556
