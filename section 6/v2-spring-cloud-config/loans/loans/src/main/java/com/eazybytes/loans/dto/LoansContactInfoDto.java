@@ -13,6 +13,6 @@ import java.util.Map;
 public class LoansContactInfoDto{
 
     private String message;
-    private Map<String, String> contactInfo;
+    private Map<String, String> contactDetails;
     private List<String> onCallSupport;
 }

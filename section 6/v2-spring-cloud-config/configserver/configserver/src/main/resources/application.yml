@@ -11,11 +11,25 @@ spring:
           #search-locations: classpath:/config
           #search-locations: file:///C:/Users/jalit/OneDrive/Desktop/microservice/section%202/section%206/v2-spring-cloud-config/config/
         git:
-          uri: https://github.com/eazybytes/eazybytes-config.git
+          #uri: https://github.com/eazybytes/eazybytes-config.git
+          uri: https://github.com/Khemz-Developer/eazy.git
           default-label: main
           timeout: 10
           clone-on-start: true
           force-pull: true
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+management:
+  endpoint:
+    web:
+      exposure:
+        include: "*"
+
+
 
 encrypt:
   key: 123466fjfdjdhdhjfjjtjjtig899999
