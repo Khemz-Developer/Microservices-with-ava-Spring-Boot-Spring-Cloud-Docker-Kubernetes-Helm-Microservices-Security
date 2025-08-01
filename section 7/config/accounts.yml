@@ -1,0 +1,11 @@
+build:
+  version: "3.0"
+
+accounts:
+  message: "Welcome to Easy Banking Application running in development"
+  contactDetails:
+    name: "Jalitha Developer"
+    email: "6B0Hw@example.com"
+  onCallSupport:
+    - (555) 555-5555
+    - (555) 555-5556

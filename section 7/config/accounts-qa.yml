@@ -1,0 +1,11 @@
+build:
+  version: "2.0"
+
+accounts:
+  message: "Welcome to Easy Banking Application running in QA"
+  contactDetails:
+    name: "Jalitha QA"
+    email: "6B0Hw@exampleQA.com"
+  onCallSupport:
+    - (555) 555-3335
+    - (555) 655-5556
